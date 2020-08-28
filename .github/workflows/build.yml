@@ -8,7 +8,7 @@ on:
     types: [ready_for_review]
 
 jobs:
-  test:
+  test_and_build:
     runs-on: ubuntu-latest
 
     strategy:
@@ -33,29 +33,6 @@ jobs:
 
       - name: Lint project
         run: yarn lint
-
-  build: 
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [12.x]
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
       
-      - name: Cache node modules
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-node-
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
       - name: Build project
         run: yarn build
